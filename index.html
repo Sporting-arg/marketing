@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playbook de Campañas · Synerise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14253B; --ink-2:#1E3553; --paper:#EEF1F6; --panel:#FFFFFF;
+    --line:#DCE2EC; --muted:#5B6B82; --muted-2:#8A98AD; --text:#1B2A40;
+    --act:#16A34A; --act-bg:#DCFCE7; --act-tx:#166534;
+    --rdy:#2563EB; --rdy-bg:#DBEAFE; --rdy-tx:#1D4ED8;
+    --pen:#F59E0B; --pen-bg:#FEF3C7; --pen-tx:#92400E;
+    --pau:#94A3B8; --pau-bg:#E8EDF3; --pau-tx:#475569;
+    --fin:#475569; --fin-bg:#D5DCE6; --fin-tx:#1E293B;
+    --shadow:0 1px 2px rgba(20,37,59,.06),0 8px 24px -12px rgba(20,37,59,.18);
+    --r:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--paper);
+    background-image:radial-gradient(circle at 1px 1px,rgba(20,37,59,.045) 1px,transparent 0);
+    background-size:22px 22px;-webkit-font-smoothing:antialiased;line-height:1.45}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 20px 64px}
+
+  header{background:var(--ink);background-image:linear-gradient(120deg,#14253B 0%,#1E3553 60%,#244069 100%);
+    color:#fff;border-radius:0 0 var(--r) var(--r);box-shadow:var(--shadow);position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;
+    background:radial-gradient(circle,rgba(37,99,235,.35),transparent 70%)}
+  .hd{max-width:1240px;margin:0 auto;padding:26px 20px 24px;display:flex;align-items:flex-end;
+    justify-content:space-between;gap:16px;flex-wrap:wrap;position:relative}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:#9DB6E0;margin:0 0 6px}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4vw,40px);margin:0;
+    letter-spacing:-.01em;line-height:1.02}
+  .sub{color:#B8C6DC;font-size:13.5px;margin-top:7px;max-width:580px}
+  .hd-actions{display:flex;gap:9px;align-items:center}
+  .ghost{background:rgba(255,255,255,.08);color:#E8EEF8;border:1px solid rgba(255,255,255,.18);border-radius:9px;
+    padding:8px 13px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;
+    transition:background .15s,transform .1s;display:inline-flex;gap:6px;align-items:center}
+  .ghost:hover{background:rgba(255,255,255,.16)} .ghost:active{transform:translateY(1px)}
+  .stamp{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#7E93B5;margin-top:8px}
+
+  .board{display:flex;gap:10px;flex-wrap:wrap;margin:-22px auto 0;max-width:1240px;padding:0 20px;position:relative;z-index:3}
+  .chip{flex:1 1 0;min-width:124px;background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:13px 14px;cursor:pointer;box-shadow:var(--shadow);transition:transform .12s,box-shadow .15s;text-align:left;position:relative}
+  .chip:hover{transform:translateY(-2px)}
+  .chip[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink),var(--shadow)}
+  .chip .n{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:25px;line-height:1;color:var(--ink)}
+  .chip .l{font-size:11.5px;font-weight:600;color:var(--muted);margin-top:7px;display:flex;align-items:center;gap:7px}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .dot.act{background:var(--act)} .dot.rdy{background:var(--rdy)} .dot.pen{background:var(--pen)}
+  .dot.pau{background:var(--pau)} .dot.fin{background:var(--fin)} .dot.all{background:var(--ink)}
+
+  .pelota{max-width:1240px;margin:16px auto 0;padding:0 20px}
+  .pelota-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);
+    padding:13px 15px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .pelota-card .ttl{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:var(--ink);
+    display:flex;align-items:center;gap:8px}
+  .pelota-card .ttl small{font-weight:500;color:var(--muted-2);font-family:'Inter';font-size:11px}
+  .teamstat{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+  .ts{border:1px solid var(--line);border-radius:999px;padding:5px 11px 5px 9px;font-size:12px;font-weight:600;
+    cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:var(--panel);transition:transform .1s}
+  .ts:hover{transform:translateY(-1px)}
+  .ts[aria-pressed="true"]{box-shadow:0 0 0 2px currentColor inset}
+  .ts .b{font-family:'JetBrains Mono',monospace;font-weight:700;background:rgba(0,0,0,.06);border-radius:6px;
+    padding:1px 6px;font-size:11px}
+
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:22px 0 18px}
+  .search{flex:1 1 220px;min-width:180px;position:relative}
+  .search input{width:100%;border:1px solid var(--line);background:var(--panel);border-radius:10px;
+    padding:10px 12px 10px 34px;font-size:13.5px;font-family:'Inter',sans-serif;color:var(--text)}
+  .search input:focus{outline:none;border-color:var(--rdy);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted-2)}
+  select.f{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:10px 12px;font-size:13px;
+    font-family:'Inter',sans-serif;color:var(--text);cursor:pointer}
+  select.f:focus{outline:none;border-color:var(--rdy)}
+  .seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel)}
+  .seg button{border:none;background:none;padding:10px 13px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);font-family:'Inter',sans-serif}
+  .seg button.on{background:var(--ink);color:#fff}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);
+    padding:18px 18px 16px 22px;position:relative;overflow:hidden;animation:rise .4s cubic-bezier(.2,.7,.3,1) both}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--rail,var(--pau))}
+  .card.act{--rail:var(--act)} .card.rdy{--rail:var(--rdy)} .card.pen{--rail:var(--pen)}
+  .card.pau{--rail:var(--pau)} .card.fin{--rail:var(--fin)}
+  .c-top{display:flex;align-items:flex-start;gap:11px;margin-bottom:11px}
+  .id{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;color:#fff;background:var(--ink);
+    border-radius:8px;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:none}
+  .name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16.5px;line-height:1.18;color:var(--ink);
+    flex:1;letter-spacing:-.01em;padding-top:2px}
+
+  .pillwrap{position:relative;flex:none}
+  .pill{border:none;cursor:pointer;border-radius:999px;padding:6px 12px 6px 11px;font-size:12px;font-weight:700;
+    font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;transition:filter .12s}
+  .pill:hover{filter:brightness(.97)} .pill .car{font-size:9px;opacity:.7}
+  .pill.act{background:var(--act-bg);color:var(--act-tx)} .pill.rdy{background:var(--rdy-bg);color:var(--rdy-tx)}
+  .pill.pen{background:var(--pen-bg);color:var(--pen-tx)} .pill.pau{background:var(--pau-bg);color:var(--pau-tx)}
+  .pill.fin{background:var(--fin-bg);color:var(--fin-tx)}
+  .pop{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:11px;
+    box-shadow:0 12px 32px -8px rgba(20,37,59,.3);padding:6px;z-index:20;width:200px;display:none;animation:pop .14s ease both}
+  @keyframes pop{from{opacity:0;transform:translateY(-4px) scale(.97)}to{opacity:1;transform:none}}
+  .pop.open{display:block}
+  .pop button{width:100%;text-align:left;border:none;background:none;cursor:pointer;border-radius:8px;padding:8px 9px;
+    font-size:12.5px;font-weight:600;font-family:'Inter',sans-serif;color:var(--text);display:flex;align-items:center;gap:8px}
+  .pop button:hover{background:var(--paper)}
+  .pop button .dot{width:8px;height:8px}
+
+  .field{font-size:13px;margin:7px 0;color:var(--text)}
+  .field b{font-weight:600;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:1px}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0 9px}
+  .tag{font-size:11px;font-weight:600;border-radius:7px;padding:4px 9px;background:var(--paper);color:var(--muted);
+    border:1px solid var(--line);display:inline-flex;align-items:center;gap:5px}
+  .tag.prio-Alta{background:#FEE2E2;color:#B91C1C;border-color:#FECACA}
+  .tag.prio-Media{background:#FEF3C7;color:#92400E;border-color:#FDE68A}
+  .tag.prio-Baja{background:#E0F2FE;color:#075985;border-color:#BAE6FD}
+
+  .teams-h{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600;
+    margin:13px 0 7px;border-top:1px dashed var(--line);padding-top:11px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .teams-h small{font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted-2);font-size:11px}
+  .teamset{display:flex;flex-wrap:wrap;gap:7px}
+  .tchip{border:1px solid;border-radius:999px;padding:5px 8px 5px 9px;font-size:11.5px;font-weight:600;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;user-select:none;transition:transform .1s,filter .1s;position:relative}
+  .tchip:hover{transform:translateY(-1px)}
+  .tchip:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+  .tdot{width:8px;height:8px;border-radius:50%;flex:none}
+  .tchip .rmv{font-size:13px;line-height:1;opacity:.5;margin-left:1px;font-weight:700;padding:0 1px;border-radius:4px}
+  .tchip .rmv:hover{opacity:1}
+  .tchip.add{border-style:dashed;border-color:var(--line);color:var(--muted);background:var(--panel)}
+  .detalle{font-size:12px;color:var(--muted);margin-top:10px}
+  .detalle b{color:var(--ink-2);font-weight:600}
+  .notes{font-size:12px;color:var(--muted-2);font-style:italic;margin-top:7px}
+
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);box-shadow:var(--shadow)}
+  table{border-collapse:collapse;width:100%;min-width:880px;font-size:13px}
+  th{background:var(--ink);color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:600;text-align:left;
+    padding:11px 13px;font-size:12px;position:sticky;top:0}
+  td{padding:11px 13px;border-top:1px solid var(--line);vertical-align:top}
+  tr:nth-child(even) td{background:#FAFBFD}
+  td .id{display:inline-flex}
+  .hidden{display:none!important}
+  .empty{text-align:center;color:var(--muted);padding:48px 20px;font-size:14px}
+
+  footer{margin-top:26px;font-size:12px;color:var(--muted-2);text-align:center;line-height:1.7}
+  footer .leg{display:inline-flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:8px}
+  footer .leg span{display:inline-flex;align-items:center;gap:6px}
+
+  @media (max-width:560px){
+    .chip{min-width:calc(50% - 5px);flex:1 1 calc(50% - 5px)}
+    .grid{grid-template-columns:1fr} .hd{align-items:flex-start}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <div>
+      <p class="eyebrow">CRM · Retención · Synerise</p>
+      <h1>Playbook de Campañas</h1>
+      <p class="sub">Estado y equipos involucrados de cada campaña. Marcá quién tiene la pelota con un clic — todo se guarda en este navegador.</p>
+      <div class="stamp" id="stamp"></div>
+    </div>
+    <div class="hd-actions">
+      <button class="ghost" id="export">⬇ Exportar JSON</button>
+      <button class="ghost" id="reset">↺ Restablecer</button>
+    </div>
+  </div>
+</header>
+
+<div class="board" id="board"></div>
+
+<div class="pelota">
+  <div class="pelota-card">
+    <div class="ttl">🎯 ¿De qué lado está la pelota? <small>responsable actual por equipo</small></div>
+    <div class="teamstat" id="teamstat"></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="toolbar">
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Buscar campaña, segmento o nota…">
+    </div>
+    <select class="f" id="feq"><option value="">Todo equipo (involucrado)</option></select>
+    <select class="f" id="fmec"><option value="">Toda mecánica</option></select>
+    <select class="f" id="fprio"><option value="">Toda prioridad</option></select>
+    <div class="seg" role="tablist">
+      <button id="vcards" class="on">Tarjetas</button>
+      <button id="vtable">Tabla</button>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div class="tablewrap hidden" id="tablewrap">
+    <table><thead><tr>
+      <th>ID</th><th>Campaña</th><th>Estado</th><th>Equipos involucrados / a cargo</th>
+      <th>Mecánica</th><th>Canal</th><th>Timing</th><th>Prioridad</th>
+    </tr></thead><tbody id="tbody"></tbody></table>
+  </div>
+  <div class="empty hidden" id="empty">No hay campañas que coincidan con los filtros.</div>
+
+  <footer>
+    <div class="leg">
+      <span><i class="dot act"></i>Activo</span><span><i class="dot rdy"></i>Listo p/ activar</span>
+      <span><i class="dot pen"></i>Pendiente</span><span><i class="dot pau"></i>Pausado</span><span><i class="dot fin"></i>Finalizado</span>
+    </div>
+    Sporting · Antonio Luquin S.A. — equipos y responsables editables localmente. Para estado compartido entre el equipo, conectar a un backend de Google Sheets.
+  </footer>
+</div>
+
+<script>
+const META={act:{key:"Activo",cls:"act"},rdy:{key:"Listo p/ activar",cls:"rdy"},pen:{key:"Pendiente",cls:"pen"},
+  pau:{key:"Pausado",cls:"pau"},fin:{key:"Finalizado",cls:"fin"}};
+const ORDER=["act","rdy","pen","pau","fin"];
+const keyToCode=Object.fromEntries(ORDER.map(c=>[META[c].key,c]));
+
+const TEAMS={
+  SYN:{name:"Synerise",c:"#7C3AED"},
+  INF:{name:"Infracommerce-Martech",c:"#0D9488"},
+  MKT:{name:"Marketing",c:"#E11D48"},
+  DAT:{name:"Datos",c:"#0284C7"},
+  CLU:{name:"Club Milenia",c:"#CA8A04"},
+  ECO:{name:"E-Commerce",c:"#6366F1"},
+};
+const TEAM_ORDER=["SYN","INF","MKT","DAT","CLU","ECO"];
+const sortTeams=arr=>[...arr].sort((a,b)=>TEAM_ORDER.indexOf(a)-TEAM_ORDER.indexOf(b));
+function hexA(h,a){const n=parseInt(h.slice(1),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`;}
+
+const DATA=[
+ {id:"A",name:"Alto valor · 1 sola compra (6m)",estado:"Listo p/ activar",
+  seg:"Clientes de alto valor con una única compra en los últimos 6 meses (2026).",
+  accion:"Envío de cupón de descuento para usar en el eCommerce.",obj:"Aumentar la frecuencia de compra.",
+  mec:"Cupón VTEX",canal:"Email",timing:"Activable la próxima semana",prio:"Alta",
+  dep:"Marketing + E-Commerce (cupón VTEX) + Datos (segmento). No requiere Club Milenia.",
+  notas:"Arranca ya, sin esperar el Club.",eq:["MKT","DAT","ECO","SYN"],resp:["MKT"]},
+ {id:"B",name:"Omnicanal · físico → online",estado:"Listo p/ activar",
+  seg:"Clientes que compraron únicamente en el canal físico.",
+  accion:"\"¿Sabías que también podés comprar desde casa?\", aprovechando el frío. Cupón con vigencia reducida.",
+  obj:"Migrar clientes del canal físico al digital.",mec:"Cupón VTEX",canal:"Email",
+  timing:"Próxima semana · vigencia corta",prio:"Alta",
+  dep:"Marketing + E-Commerce (cupón VTEX) + Datos (canal de compra).",
+  notas:"La vigencia reducida es clave para la urgencia.",eq:["MKT","DAT","ECO","SYN"],resp:["MKT"]},
+ {id:"C",name:"Club Milenia · alto saldo / bajo canje",estado:"Pendiente",
+  seg:"Socios Club Milenia con alto saldo de puntos y bajo canje (ej. > 40.000 pts).",
+  accion:"Email con beneficios y cupones para canjear puntos. Tramo agresivo (15–20% sin tope).",
+  obj:"Fomentar el canje, fidelizar y evitar el vencimiento de puntos.",mec:"Cupón Club Milenia",canal:"Email",
+  timing:"Sujeta al avance de la integración",prio:"Media",
+  dep:"Integración Club Milenia vía Infracommerce-Martech (avanzando lento) + Datos (segmento por puntos).",
+  notas:"Definir umbral de puntos y % por tramo.",eq:["MKT","DAT","CLU","INF","SYN"],resp:["CLU","INF"]},
+ {id:"D",name:"Alto valor sin Club Milenia",estado:"Pendiente",
+  seg:"Clientes de alto valor que NO están en Club Milenia.",
+  accion:"Email invitando a sumarse (sin cupón en la 1ª instancia). Según resultados, 2º envío con incentivo.",
+  obj:"Incrementar las altas de clientes de alto valor en Club Milenia.",mec:"Sin cupón",canal:"Email",
+  timing:"2 fases — la 2ª según resultados",prio:"Media",
+  dep:"Datos (identificar quién NO está) + Club Milenia (programa).",
+  notas:"Medir tasa de alta de la 1ª fase antes del incentivo.",eq:["MKT","DAT","CLU","SYN"],resp:["CLU"]},
+ {id:"E",name:"Club Milenia sin Tarjeta Milenia",estado:"Pendiente",
+  seg:"Socios Club Milenia que no tienen Tarjeta Milenia.",
+  accion:"Comunicar beneficios de financiación con Tarjeta Milenia (9 y 12 cuotas sin interés).",
+  obj:"Aumentar las altas de Tarjeta Milenia.",mec:"Sin cupón",canal:"Email",timing:"A coordinar",prio:"Media",
+  dep:"Club Milenia / Tarjeta Milenia (unidad financiera) + Datos (cruce Club/Tarjeta).",
+  notas:"Tarjeta Milenia no figura como equipo aparte — la colgué de Club Milenia.",eq:["MKT","DAT","CLU","SYN"],resp:["CLU"]},
+ {id:"F",name:"Carrito abandonado · compra conjunta",estado:"Pendiente",
+  seg:"Clientes que vieron recomendaciones de compra conjunta y no concretaron.",
+  accion:"Dos newsletters: ticket > $200.000 con cupón; ticket < $200.000 sin cupón.",
+  obj:"Aumentar UPT y frecuencia de compra.",mec:"Mixto",canal:"Email (newsletter)",timing:"A coordinar",prio:"Media",
+  dep:"Synerise (recomendación de compra conjunta) + E-Commerce (cupón VTEX) + Datos (corte por ticket).",
+  notas:"Confirmar el corte de ticket en $200.000.",eq:["MKT","DAT","ECO","SYN"],resp:["SYN","DAT"]},
+ {id:"G",name:"Desafío Invierno",estado:"Pendiente",
+  seg:"Clientes que compraron artículos de invierno de un único rubro en el último mes.",
+  accion:"\"Completá tu look de invierno antes del 31/08 y desbloqueá un beneficio\", con raspadita o cupón.",
+  obj:"Aumentar frecuencia, UPT y ticket promedio.",mec:"Raspadita",canal:"Email + on-site",timing:"Vence 31/08",prio:"Media",
+  dep:"Synerise (raspadita on-site) + E-Commerce (cupón) + Datos (segmento).",
+  notas:"Decidir raspadita vs. cupón según esfuerzo.",eq:["MKT","DAT","ECO","SYN"],resp:["SYN"]},
+ {id:"H",name:"Clientes monobrand",estado:"Pendiente",
+  seg:"Clientes que compran exclusivamente una marca (ej. solo Adidas).",
+  accion:"Envío de novedades, lanzamientos y destacados de su marca preferida.",
+  obj:"Aumentar la frecuencia de compra.",mec:"Sin cupón",canal:"Email",timing:"Evergreen / recurrente",prio:"Baja",
+  dep:"Datos (afinidad de marca) + E-Commerce (catálogo por marca).",
+  notas:"Escalable a cada marca (Adidas, Puma, Nike, Topper…).",eq:["MKT","DAT","ECO","SYN"],resp:["DAT"]},
+ {id:"I",name:"Estacional de invierno · camperas",estado:"Pendiente",
+  seg:"Clientes que NO compraron camperas de abrigo en los últimos 3 meses.",
+  accion:"Envío de una selección de camperas.",
+  obj:"Aprovechar la estacionalidad y acelerar venta antes del ingreso a CDV.",mec:"Sin cupón",canal:"Email",
+  timing:"Antes del ingreso a CDV",prio:"Alta",
+  dep:"E-Commerce (catálogo/stock camperas) + Datos (segmento sin compra 3m).",
+  notas:"Stock/CDV no tiene equipo propio — colgado de E-Commerce. Ventana acotada.",eq:["MKT","DAT","ECO","SYN"],resp:["ECO","DAT"]},
+ {id:"J",name:"Campaña Mundialista · AFA",estado:"Activo",
+  seg:"Clientes que NO compraron productos AFA durante el último mes.",
+  accion:"Email con productos oficiales AFA bajo el concepto de \"fiebre mundialista\".",
+  obj:"Incrementar la venta de productos AFA durante el Mundial.",mec:"Sin cupón",canal:"Email",
+  timing:"Durante el Mundial (en curso)",prio:"Alta",
+  dep:"E-Commerce (productos AFA) + Datos (segmento sin compra AFA) + Marketing (concepto).",
+  notas:"Aprovechar el ritmo de la Selección.",eq:["MKT","DAT","ECO","SYN"],resp:["MKT"]},
+ {id:"K",name:"Recomendación Inteligente · DCZ Run",estado:"Pendiente",
+  seg:"Clientes que compraron zapatillas DCZ Run por más de $150.000 en los últimos 8 meses.",
+  accion:"Email con running técnico: \"Es momento de renovar tus zapatillas\".",
+  obj:"Aumentar la frecuencia de compra y generar cross selling.",mec:"Sin cupón",canal:"Email",timing:"A coordinar",prio:"Media",
+  dep:"Datos (segmento DCZ Run) + E-Commerce (catálogo running) + Synerise (recomendación).",
+  notas:"Cross-sell hacia gama técnica de mayor valor.",eq:["MKT","DAT","ECO","SYN"],resp:["DAT"]},
+ {id:"L",name:"Carrito Invisible · botines",estado:"Pendiente",
+  seg:"Clientes que visitaron la landing de botines la última semana, sin comprar.",
+  accion:"Email con productos destacados de la categoría.",obj:"Convertir el interés en ventas.",
+  mec:"Sin cupón",canal:"Email",timing:"Ventana semanal (rolling)",prio:"Media",
+  dep:"Synerise (abandoned browsing) + E-Commerce (catálogo botines).",
+  notas:"Automatizable como flow de browsing abandonado.",eq:["MKT","DAT","ECO","SYN"],resp:["SYN"]},
+ {id:"M",name:"Incentivo por encuesta post-compra",estado:"Pendiente",
+  seg:"NPS detractor físico → 15% ecomm. NPS promotor de alto valor → envío gratis ecomm.",
+  accion:"Incentivo por contestar la encuesta post-compra, diferenciado por perfil NPS.",
+  obj:"Incentivar la respuesta y reactivar/fidelizar según perfil.",mec:"Mixto",canal:"Email (post-compra)",timing:"A coordinar",prio:"Media",
+  dep:"Datos (NPS / segmentos detractor-promotor) + E-Commerce (cupón VTEX + envío gratis).",
+  notas:"Beneficio diferenciado: recuperar detractor vs. premiar promotor.",eq:["MKT","DAT","ECO","SYN"],resp:["DAT"]},
+];
+
+const LS="synerise_playbook_v2";
+let store=JSON.parse(localStorage.getItem(LS)||"{}");
+let filterState=null, filterResp=null;
+let view="cards";
+
+function ensure(id){ if(!store[id]) store[id]={}; }
+function getEstado(d){ return store[d.id]?.estado ?? d.estado; }
+function getEq(d){ return store[d.id]?.eq ?? d.eq; }
+function getResp(d){ return store[d.id]?.resp ?? d.resp; }
+function touch(id){ store[id].ts=Date.now(); localStorage.setItem(LS,JSON.stringify(store)); stampUpdate(); }
+
+function setEstado(id,k){ ensure(id); store[id].estado=k; touch(id); }
+function toggleResp(d,code){
+  ensure(d.id);
+  const cur=[...getResp(d)];
+  const i=cur.indexOf(code);
+  if(i>=0) cur.splice(i,1); else cur.push(code);
+  store[d.id].resp=cur; touch(d.id);
+}
+function addTeam(d,code){
+  ensure(d.id);
+  const cur=[...getEq(d)];
+  if(!cur.includes(code)) cur.push(code);
+  store[d.id].eq=cur; touch(d.id);
+}
+function removeTeam(d,code){
+  ensure(d.id);
+  const eq=getEq(d).filter(c=>c!==code);
+  const resp=getResp(d).filter(c=>c!==code);
+  store[d.id].eq=eq; store[d.id].resp=resp; touch(d.id);
+}
+
+function stampUpdate(){
+  const ts=Object.values(store).map(v=>v.ts).filter(Boolean);
+  const el=document.getElementById("stamp");
+  if(!ts.length){el.textContent="Sin cambios guardados · valores iniciales";return;}
+  const last=new Date(Math.max(...ts));
+  el.textContent="Última edición · "+last.toLocaleString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+}
+
+function uniq(k){return [...new Set(DATA.map(d=>d[k]))];}
+function fillSelect(id,opts){const s=document.getElementById(id);opts.forEach(o=>{const e=document.createElement("option");e.value=o.v;e.textContent=o.t;s.appendChild(e);});}
+fillSelect("feq",TEAM_ORDER.map(c=>({v:c,t:TEAMS[c].name})));
+fillSelect("fmec",uniq("mec").map(v=>({v,t:v})));
+fillSelect("fprio",[{v:"Alta",t:"Alta"},{v:"Media",t:"Media"},{v:"Baja",t:"Baja"}]);
+
+function renderBoard(){
+  const counts={act:0,rdy:0,pen:0,pau:0,fin:0};
+  DATA.forEach(d=>counts[keyToCode[getEstado(d)]]++);
+  const items=[{code:null,label:"Total",n:DATA.length,dot:"all"},
+    ...ORDER.map(c=>({code:c,label:META[c].key,n:counts[c],dot:c}))];
+  const board=document.getElementById("board");
+  board.innerHTML=items.map(it=>`<button class="chip" data-code="${it.code??''}" aria-pressed="${filterState===it.code}">
+    <div class="n">${it.n}</div><div class="l"><span class="dot ${it.dot}"></span>${it.label}</div></button>`).join("");
+  board.querySelectorAll(".chip").forEach(ch=>ch.addEventListener("click",()=>{
+    const c=ch.dataset.code||null; filterState=(filterState===c)?null:c; renderBoard(); render();
+  }));
+}
+
+function renderTeamStat(){
+  const ts=document.getElementById("teamstat");
+  ts.innerHTML=TEAM_ORDER.map(code=>{
+    const n=DATA.filter(d=>getResp(d).includes(code)).length;
+    const on=filterResp===code; const c=TEAMS[code].c;
+    return `<button class="ts" data-team="${code}" aria-pressed="${on}"
+      style="color:${c};border-color:${hexA(c,.4)};background:${on?hexA(c,.12):'#fff'}">
+      <span class="tdot" style="background:${c}"></span>${TEAMS[code].name}
+      <span class="b">${n}</span></button>`;
+  }).join("");
+  ts.querySelectorAll(".ts").forEach(b=>b.addEventListener("click",()=>{
+    const c=b.dataset.team; filterResp=(filterResp===c)?null:c; renderTeamStat(); render();
+  }));
+}
+
+function teamChipHTML(d,code){
+  const t=TEAMS[code]; const on=getResp(d).includes(code);
+  const style=on?`background:${t.c};color:#fff;border-color:${t.c}`
+                :`background:${hexA(t.c,.10)};color:${t.c};border-color:${hexA(t.c,.32)}`;
+  return `<span class="tchip" style="${style}" data-toggle="${code}" data-id="${d.id}" role="button" tabindex="0"
+      title="${on?'A cargo — clic para soltar la pelota':'Clic para marcar a cargo'}">
+      <i class="tdot" style="background:${on?'#fff':t.c}"></i>${t.name}${on?' · a cargo':''}
+      <b class="rmv" data-rm="${code}" data-id="${d.id}" title="Quitar equipo">×</b></span>`;
+}
+function teamSetHTML(d){
+  const chips=sortTeams(getEq(d)).map(c=>teamChipHTML(d,c)).join("");
+  const rest=TEAM_ORDER.filter(c=>!getEq(d).includes(c));
+  const add=rest.length?`<span class="pillwrap"><span class="tchip add" data-add="${d.id}" role="button" tabindex="0">＋ equipo</span>
+    <div class="pop" data-addpop="${d.id}">${rest.map(c=>`<button data-addteam="${c}" data-id="${d.id}">
+      <span class="dot" style="background:${TEAMS[c].c}"></span>${TEAMS[c].name}</button>`).join("")}</div></span>`:"";
+  return `<div class="teamset">${chips}${add}</div>`;
+}
+
+function cardHTML(d,i){
+  const code=keyToCode[getEstado(d)];
+  const onCargo=getResp(d).length;
+  return `<article class="card ${code}" style="animation-delay:${Math.min(i*28,260)}ms">
+    <div class="c-top">
+      <span class="id">${d.id}</span><span class="name">${d.name}</span>
+      <span class="pillwrap">
+        <button class="pill ${code}" data-estado="${d.id}" aria-haspopup="true">${getEstado(d)} <span class="car">▼</span></button>
+        <div class="pop" data-estadopop="${d.id}">${ORDER.map(c=>`<button data-set="${c}"><span class="dot ${c}"></span>${META[c].key}</button>`).join("")}</div>
+      </span>
+    </div>
+    <div class="field"><b>Segmento</b>${d.seg}</div>
+    <div class="field"><b>Acción</b>${d.accion}</div>
+    <div class="field"><b>Objetivo</b>${d.obj}</div>
+    <div class="tags"><span class="tag">${d.mec}</span><span class="tag">${d.canal}</span>
+      <span class="tag prio-${d.prio}">Prioridad ${d.prio}</span><span class="tag">⏱ ${d.timing}</span></div>
+    <div class="teams-h">Equipos involucrados <small>${onCargo?onCargo+' a cargo ahora':'sin responsable asignado'}</small></div>
+    ${teamSetHTML(d)}
+    <div class="detalle"><b>Detalle:</b> ${d.dep}</div>
+    <div class="notes">${d.notas}</div>
+  </article>`;
+}
+
+function tableRows(list){
+  return list.map(d=>{
+    const code=keyToCode[getEstado(d)];
+    return `<tr>
+      <td><span class="id">${d.id}</span></td><td><b>${d.name}</b></td>
+      <td><span class="pillwrap"><button class="pill ${code}" data-estado="${d.id}" aria-haspopup="true">${getEstado(d)} <span class="car">▼</span></button>
+        <div class="pop" data-estadopop="${d.id}">${ORDER.map(c=>`<button data-set="${c}"><span class="dot ${c}"></span>${META[c].key}</button>`).join("")}</div></span></td>
+      <td style="min-width:240px">${teamSetHTML(d)}</td>
+      <td>${d.mec}</td><td>${d.canal}</td><td>${d.timing}</td>
+      <td><span class="tag prio-${d.prio}">${d.prio}</span></td></tr>`;
+  }).join("");
+}
+
+function currentList(){
+  const q=document.getElementById("q").value.trim().toLowerCase();
+  const fe=document.getElementById("feq").value, fm=document.getElementById("fmec").value, fp=document.getElementById("fprio").value;
+  return DATA.filter(d=>{
+    if(filterState && keyToCode[getEstado(d)]!==filterState) return false;
+    if(filterResp && !getResp(d).includes(filterResp)) return false;
+    if(fe && !getEq(d).includes(fe)) return false;
+    if(fm && d.mec!==fm) return false;
+    if(fp && d.prio!==fp) return false;
+    if(q){const hay=(d.name+" "+d.seg+" "+d.notas+" "+d.accion+" "+d.obj+" "+d.dep).toLowerCase(); if(!hay.includes(q)) return false;}
+    return true;
+  });
+}
+
+function render(){
+  const list=currentList();
+  const grid=document.getElementById("grid"),tbody=document.getElementById("tbody"),
+        empty=document.getElementById("empty"),tw=document.getElementById("tablewrap");
+  empty.classList.toggle("hidden",list.length>0);
+  if(view==="cards"){grid.classList.remove("hidden");tw.classList.add("hidden");grid.innerHTML=list.map(cardHTML).join("");}
+  else{grid.classList.add("hidden");tw.classList.toggle("hidden",list.length===0);tbody.innerHTML=tableRows(list);}
+  wire();
+}
+
+function closeAllPops(){document.querySelectorAll(".pop.open").forEach(p=>p.classList.remove("open"));}
+function openPop(sel){const p=document.querySelector(sel);const o=p.classList.contains("open");closeAllPops();if(!o)p.classList.add("open");}
+
+function wire(){
+  document.querySelectorAll(".pill[data-estado]").forEach(b=>b.addEventListener("click",e=>{
+    e.stopPropagation(); openPop(`.pop[data-estadopop="${b.dataset.estado}"]`);}));
+  document.querySelectorAll(".pop[data-estadopop]").forEach(pop=>pop.querySelectorAll("button[data-set]").forEach(btn=>
+    btn.addEventListener("click",e=>{e.stopPropagation();setEstado(pop.dataset.estadopop,META[btn.dataset.set].key);closeAllPops();renderBoard();render();})));
+  const toggle=el=>{const d=DATA.find(x=>x.id===el.dataset.id);toggleResp(d,el.dataset.toggle);renderTeamStat();render();};
+  document.querySelectorAll(".tchip[data-toggle]").forEach(el=>{
+    el.addEventListener("click",e=>{e.stopPropagation();toggle(el);});
+    el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle(el);}});
+  });
+  document.querySelectorAll(".rmv[data-rm]").forEach(x=>x.addEventListener("click",e=>{
+    e.stopPropagation();const d=DATA.find(z=>z.id===x.dataset.id);removeTeam(d,x.dataset.rm);renderTeamStat();render();}));
+  document.querySelectorAll(".tchip.add[data-add]").forEach(a=>a.addEventListener("click",e=>{
+    e.stopPropagation();openPop(`.pop[data-addpop="${a.dataset.add}"]`);}));
+  document.querySelectorAll(".pop[data-addpop]").forEach(pop=>pop.querySelectorAll("button[data-addteam]").forEach(btn=>
+    btn.addEventListener("click",e=>{e.stopPropagation();const d=DATA.find(z=>z.id===btn.dataset.id);addTeam(d,btn.dataset.addteam);closeAllPops();renderTeamStat();render();})));
+}
+document.addEventListener("click",closeAllPops);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAllPops();});
+
+["q","feq","fmec","fprio"].forEach(id=>document.getElementById(id).addEventListener("input",render));
+document.getElementById("vcards").addEventListener("click",()=>{view="cards";toggleView();});
+document.getElementById("vtable").addEventListener("click",()=>{view="table";toggleView();});
+function toggleView(){document.getElementById("vcards").classList.toggle("on",view==="cards");
+  document.getElementById("vtable").classList.toggle("on",view==="table");render();}
+
+document.getElementById("export").addEventListener("click",()=>{
+  const out=DATA.map(d=>({id:d.id,campaña:d.name,estado:getEstado(d),mecanica:d.mec,
+    equipos_involucrados:sortTeams(getEq(d)).map(c=>TEAMS[c].name),
+    responsable_actual:sortTeams(getResp(d)).map(c=>TEAMS[c].name),
+    canal:d.canal,timing:d.timing,prioridad:d.prio}));
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download="playbook_synerise_"+new Date().toISOString().slice(0,10)+".json";a.click();});
+document.getElementById("reset").addEventListener("click",()=>{
+  if(confirm("¿Restablecer todo a los valores iniciales? Se borran estados, equipos y responsables guardados en este navegador.")){
+    store={};localStorage.removeItem(LS);stampUpdate();renderBoard();renderTeamStat();render();}});
+
+renderBoard(); renderTeamStat(); render(); stampUpdate();
+</script>
+</body>
+</html>
